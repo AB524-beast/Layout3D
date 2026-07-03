@@ -1,12 +1,13 @@
-'use html'
 'use client';
 
 import React, { useState } from 'react';
 import { Upload, Sun, Moon, Layers, Box, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
+import ThreeScene from '@/components/ThreeScene';
 
+// Define the shape of data returned from the OpenCV / Tesseract API
 interface Room {
   label: string;
-  dimensions: str;
+  dimensions: string;
   confidence: number;
 }
 
@@ -22,7 +23,7 @@ export default function Home() {
   // Theme Toggler
   const toggleTheme = () => setDarkMode(!darkMode);
 
-  // Drag & Drop Handlers
+  // Drag & Drop Event Handlers
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(true);
@@ -50,7 +51,7 @@ export default function Home() {
     }
   };
 
-  // Validate file types matching our Layout3D specification
+  // Validate that the image file type conforms to Layout3D specifications
   const validateAndProcessFile = (selectedFile: File) => {
     if (!['image/png', 'image/jpeg', 'image/jpg'].includes(selectedFile.type)) {
       setError('Invalid file format. Layout3D only accepts PNG or JPEG blueprint configurations.');
@@ -60,7 +61,7 @@ export default function Home() {
     uploadAndAnalyze(selectedFile);
   };
 
-  // Multipart HTTP Stream Upload Request to FastAPI Service
+  // Multipart HTTP Stream Upload Request targeting the FastAPI Service
   const uploadAndAnalyze = async (targetFile: File) => {
     setLoading(true);
     setError(null);
@@ -91,7 +92,7 @@ export default function Home() {
     <div className={darkMode ? 'dark' : ''}>
       <div className="min-h-screen font-sans bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300">
         
-        {/* BRANDING HEADER */}
+        {/* BRANDING HEADER BAR */}
         <header className="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur px-6 py-4 flex justify-between items-center sticky top-0 z-50">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center shadow-md">
@@ -110,7 +111,7 @@ export default function Home() {
         </header>
 
         {/* WORKSPACE LAYOUT CONTAINER */}
-        <main className="max-w-[1600px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(1screen-80px)]">
+        <main className="max-w-[1600px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-80px)]">
           
           {/* LEFT SIDEBAR: MANAGE INPUT CONTROLS */}
           <section className="lg:col-span-4 flex flex-col space-y-6">
@@ -145,7 +146,7 @@ export default function Home() {
                 <p className="text-xs text-slate-400">Supports high-res PNG, JPG or JPEG blueprints</p>
               </div>
 
-              {/* LIVE FILE FEEDBACK / ALERTS */}
+              {/* LIVE FILE VALIDATION FEEDBACK */}
               {file && !error && (
                 <div className="flex items-center gap-2 p-3 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-950/50 rounded-xl text-sm">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
@@ -177,7 +178,7 @@ export default function Home() {
                   {rooms.map((room, idx) => (
                     <div 
                       key={idx}
-                      className="p-4 border border-slate-100 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-950/30 rounded-xl flex justify-between items-center hover:border-slate-200 dark:hover:border-slate-800 transition-colors animate-fade-in"
+                      className="p-4 border border-slate-100 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-950/30 rounded-xl flex justify-between items-center hover:border-slate-200 dark:hover:border-slate-800 transition-colors"
                     >
                       <div>
                         <h4 className="font-semibold text-sm tracking-tight">{room.label}</h4>
@@ -198,22 +199,16 @@ export default function Home() {
             </div>
           </section>
 
-          {/* RIGHT VIEWPORT PANEL: INTERACTIVE CANVAS CONTAINER PLACEHOLDER */}
+          {/* RIGHT VIEWPORT PANEL: INTERACTIVE CANVAS CONTAINER */}
           <section className="lg:col-span-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col h-[600px] lg:h-auto min-h-[450px] relative">
             <div className="absolute top-4 left-4 z-10 bg-slate-950/70 backdrop-blur text-white px-3 py-1.5 rounded-lg text-xs font-medium border border-white/10 flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              WebGL Scene Ready
+              WebGL Scene Active
             </div>
             
-            {/* Placeholder scene content - Phase 5 will inject the live React-Three-Fiber context loop right here */}
-            <div className="flex-1 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex flex-col items-center justify-center text-slate-400 p-8">
-              <Box className="w-12 h-12 text-slate-300 dark:text-slate-800 stroke-[1.5] mb-3" />
-              <p className="text-sm font-medium">3D Spatial Viewport Canvas</p>
-              <p className="text-xs text-slate-400 max-w-sm text-center mt-1">
-                {rooms.length > 0 
-                  ? `Extruding ${rooms.length} structural layouts into 3D boxes...` 
-                  : 'Awaiting image analysis triggers to generate spatial geometry meshes.'}
-              </p>
+            {/* Inject live interactive Three.js component loop mapping real-time data adjustments */}
+            <div className="flex-1 w-full h-full flex flex-col">
+              <ThreeScene rooms={rooms} darkMode={darkMode} />
             </div>
           </section>
 
