@@ -2,6 +2,24 @@ import cv2
 import numpy as np
 import pytesseract
 import re
+import os
+
+# 1. Look for common Windows installation locations for Tesseract
+possible_paths = [
+    r"C:\Program Files\Tesseract-OCR\tesseract.exe",
+    r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe"
+]
+
+tesseract_found = False
+for path in possible_paths:
+    if os.path.exists(path):
+        pytesseract.pytesseract.tesseract_cmd = path
+        tesseract_found = True
+        print(f"--> [Layout3D Success] Located Tesseract binary engine at: {path}")
+        break
+
+if not tesseract_found:
+    print("--> [Layout3D Warning] CRITICAL: Could not find tesseract.exe in standard Program Files directories.")
 
 class LayoutProcessor:
     def __init__(self):
