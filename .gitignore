@@ -1,0 +1,13 @@
+# Frontend Build 
+frontend/node_modules/ 
+frontend/.next/ 
+frontend/out/ 
+frontend/build/ 
+frontend/.env*.local 
+# Backend Environment 
+backend/venv/ 
+backend/__pycache__/ 
+backend/*.pyc 
+backend/.env 
+backend/.pytest_cache/ 
+.DS_Store 
